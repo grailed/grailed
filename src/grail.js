@@ -31,6 +31,10 @@ var Grail = extendify( {
 				value: {},
 				writable: true
 			},
+			__module: {
+				value: {},
+				writable: true
+			},
 			__route: {
 				value: {},
 				writable: true
@@ -48,6 +52,11 @@ var Grail = extendify( {
 			models: {
 				get: function () {
 					return this.__model;
+				}
+			},
+			modules: {
+				get: function () {
+					return this.__module;
 				}
 			},
 			routes: {
@@ -127,6 +136,18 @@ var Grail = extendify( {
 			self.__model[ _name ] = _schema;
 		} else {
 			return self.__model[ _name ];
+		}
+
+		return self;
+	},
+
+	module: function ( _name, _module ) {
+		var self = this;
+
+		if ( is.not.nullOrUndefined( _module ) ) {
+			self.__module[ _name ] = _module;
+		} else {
+			return self.__module[ _name ];
 		}
 
 		return self;
