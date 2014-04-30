@@ -121,10 +121,14 @@ var Grail = extendify( {
 		return self;
 	},
 
-	end: function () {
+	end: function ( _callback ) {
 		var self = this;
 
 		self.emit( 'end' );
+
+		if ( typeof _callback === 'function' ) {
+			_callback();
+		}
 
 		return self;
 	},
