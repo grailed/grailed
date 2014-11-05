@@ -44,6 +44,11 @@ var Grail = extendify( {
 					return this.__class;
 				}
 			},
+			configs: {
+				get: function () {
+					return this.__config;
+				}
+			},
 			controllers: {
 				get: function () {
 					return this.__controller;
@@ -77,6 +82,11 @@ var Grail = extendify( {
 
 		if ( is.not.nullOrUndefined( _class ) ) {
 			self.__class[ _name ] = _class;
+			Object.defineProperty( self.class, _name, {
+				get: function () {
+					return self.__class[ _name ];
+				}
+			} );
 		} else {
 			return self.__class[ _name ];
 		}
@@ -89,6 +99,11 @@ var Grail = extendify( {
 
 		if ( is.not.nullOrUndefined( _config ) ) {
 			self.__config[ _name ] = _config;
+			Object.defineProperty( self.config, _name, {
+				get: function () {
+					return self.__config[ _name ];
+				}
+			} );
 		} else {
 			return self.__config[ _name ];
 		}
@@ -101,6 +116,11 @@ var Grail = extendify( {
 
 		if ( is.not.nullOrUndefined( _controller ) ) {
 			self.__controller[ _name ] = _controller;
+			Object.defineProperty( self.controller, _name, {
+				get: function () {
+					return self.__controller[ _name ];
+				}
+			} );
 		} else {
 			return self.__controller[ _name ];
 		}
@@ -138,6 +158,11 @@ var Grail = extendify( {
 
 		if ( is.not.nullOrUndefined( _schema ) ) {
 			self.__model[ _name ] = _schema;
+			Object.defineProperty( self.model, _name, {
+				get: function () {
+					return self.__model[ _name ];
+				}
+			} );
 		} else {
 			return self.__model[ _name ];
 		}
@@ -150,6 +175,11 @@ var Grail = extendify( {
 
 		if ( is.not.nullOrUndefined( _module ) ) {
 			self.__module[ _name ] = _module;
+			Object.defineProperty( self.module, _name, {
+				get: function () {
+					return self.__module[ _name ];
+				}
+			} );
 		} else {
 			return self.__module[ _name ];
 		}
@@ -162,6 +192,11 @@ var Grail = extendify( {
 
 		if ( is.not.nullOrUndefined( _options ) ) {
 			self.__route[ _name ] = _options;
+			Object.defineProperty( self.route, _name, {
+				get: function () {
+					return self.__route[ _name ];
+				}
+			} );
 		} else {
 			return self.__route[ _name ];
 		}

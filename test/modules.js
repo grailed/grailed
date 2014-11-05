@@ -1,20 +1,26 @@
-var Grailed = require( '../src' );
+var _ = require( 'underscore' ),
+	Grailed = require( '../src' ),
+	should = require( 'should' );
 
-describe( "modules", function () {
+describe( 'grailed', function () {
 
 	var app = Grailed.create();
 
-	it( 'add modules', function () {
-		app
-			.module( 'a', 'a' )
-			.module( 'b', 'b' );
-	} );
+	_.each( [ 'class', 'config', 'controller', 'model', 'module', 'route' ], function ( _method ) {
 
-	it( 'retrieve modules', function () {
-		app.module( 'a' ).should.equal( 'a' );
-		app.module( 'b' ).should.equal( 'b' );
-		app.modules.a.should.equal( 'a' );
-		app.modules.b.should.equal( 'b' );
+		it( 'should be able to set and retrieve ' + _method, function () {
+			var plural = _method === 'class' ? 'es' : 's';
+
+			app[ _method ]( 'a', 'a' );
+			app[ _method ]( 'b', 'b' );
+			app[ _method ]( 'a' ).should.eql( 'a' );
+			app[ _method ]( 'b' ).should.eql( 'b' );
+			app[ _method + plural ].a.should.eql( 'a' );
+			app[ _method + plural ].b.should.eql( 'b' );
+			app[ _method ].a.should.eql( 'a' );
+			app[ _method ].b.should.eql( 'b' );
+		} );
+
 	} );
 
 } );

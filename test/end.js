@@ -1,6 +1,6 @@
 var Grailed = require( '../src' );
 
-describe( "end", function () {
+describe( 'end', function () {
 
 	var app = Grailed.create();
 
