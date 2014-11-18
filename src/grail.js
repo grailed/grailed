@@ -115,6 +115,15 @@ var Grail = extendify( {
 		var self = this;
 
 		if ( is.not.nullOrUndefined( _controller ) ) {
+
+			// If this is an instance of `sc-extendify` and has not been
+			// instantiated, instantiate it
+			if ( is.a.func( _controller ) && is.a.func( _controller.extend ) ) {
+				try {
+					_controller = new _controller();
+				} catch ( e ) {}
+			}
+
 			self.__controller[ _name ] = _controller;
 			Object.defineProperty( self.controller, _name, {
 				get: function () {
