@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+var config = {},
+	cwd = process.cwd(),
+	grailedrc,
+	grailedDefaults,
+	path = require( 'path' );
+
+grailedDefaults = {
+
+	APP_NAME: 'grailed',
+	CWD: cwd,
+	FOLDER_CLIENT: 'client',
+	FOLDER_CONTROLLERS: 'controllers',
+	FOLDER_MODELS: 'models',
+	FOLDER_ROUTES: 'routes',
+	FOLDER_SERVICES: 'services',
+	FOLDER_VIEWS: 'views',
+	PATH_API: path.join( cwd, 'src/api' ),
+	PATH_CLIENT: path.join( cwd, 'src/client' ),
+	PATH_CONFIG: path.join( cwd, 'config' ),
+	PATH_GRAILED: path.join( __dirname, '..' ),
+	PATH_PUBLIC: path.join( cwd, 'public' ),
+	PATH_SRC: path.join( cwd, 'src' ),
+	PATH_TEST: path.join( cwd, 'test' ),
+	SESSION_TOKEN_EXPIRE_LENGTH: ( 1000 * 60 * 60 * 24 * 30 ),
+	VIEW_ENGINE: 'ejs'
+
+};
+
+try {
+	grailedrc = JSON.parse( require( 'fs' ).readFileSync( path.join( cwd, '.grailedrc' ), {
+		encoding: 'utf8'
+	} ) );
+} catch ( e ) {}
+
+if ( 'object' === typeof grailedrc ) {
+	Object.keys( grailedrc ).forEach( function ( _grailedrcKey ) {
+		grailedDefaults[ _grailedrcKey ] = grailedrc[ _grailedrcKey ];
+	} );
+}
+
+Object.keys( grailedDefaults ).forEach( function ( _defaultKey ) {
+	var property;
+
+	if ( grailedrc.hasOwnProperty( _defaultKey ) ) {
+		property = grailedrc[ _defaultKey ];
+
+		// Tack on cwd if the property is a ^GRAILED_PATH
+		if ( /^PATH_/.test( _defaultKey ) ) {
+			property = path.join( cwd, property );
+		}
+
+	} else {
+		property = grailedDefaults[ _defaultKey ];
+	}
+
+	process.env[ 'GRAILED_' + _defaultKey ] = config[ _defaultKey ] = process.env.hasOwnProperty( 'GRAILED_' + _defaultKey ) ? process.env[ 'GRAILED_' + _defaultKey ] : property;
+} );
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.DEBUG = config.APP_NAME;
+
+module.exports = config;

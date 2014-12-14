@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+var path = require( 'path' ),
+	requireMethodsGlob = require( path.join( __dirname, '../src/system/helpers/requireMethodsGlob' ) );
+
+process.env.NODE_ENV = 'test';
+
+// Test environment globals
+test = requireMethodsGlob( path.join( __dirname, '../src/system/helpers/test/*' ), path.join( grailed.env.PATH_TEST, 'api/helpers/*' ) );
+request = test.request;
+_ = require( 'underscore' );
+async = require( 'async' );
+should = require( 'should' );
+
+module.exports = test;

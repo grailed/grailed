@@ -1,9 +1,9 @@
 var gulp = require( 'gulp' ),
-	browserify = require( 'gulp-browserify' ),
 	jshint = require( 'gulp-jshint' ),
 	jshintReporter = require( "jshint-stylish" ),
 	rename = require( 'gulp-rename' ),
-	shell = require( 'gulp-shell' )
+	mkdirp = require( 'mkdirp' ),
+	shell = require( 'gulp-shell' ),
 	uglify = require( 'gulp-uglify' );
 
 var pkg = require( './package.json' );
@@ -14,37 +14,29 @@ gulp.task( "jshint", function () {
 		.pipe( jshint.reporter( jshintReporter ) );
 } );
 
-gulp.task( 'scriptsApp', [ 'jshint' ], function () {
-	return gulp.src( './src/index.js' )
-		.pipe( browserify( {
-			standalone: pkg.name,
-			debug: true
-		} ) )
-		.pipe( rename( pkg.name + '.js' ) )
-		.pipe( gulp.dest( './dist' ) );
+gulp.task( 'scripts', [ 'jshint' ], function () {
+	mkdirp( './dist' );
+	return gulp.src( '' )
+		.pipe( shell( [ './node_modules/.bin/browserify ' +
+			'./src/index.js ' +
+			'--ignore ./src/system/index.js ' +
+			'--standalone ' + pkg.name + ' ' +
+			'--outfile ./dist/' + pkg.name + '.js'
+		] ) );
 } );
 
-gulp.task( 'scriptsAppMinify', [ 'scriptsApp' ], function () {
+gulp.task( 'scripts/minify', [ 'scripts' ], function () {
 	return gulp.src( './dist/' + pkg.name + '.js' )
 		.pipe( uglify() )
 		.pipe( rename( pkg.name + '.min.js' ) )
 		.pipe( gulp.dest( './dist' ) );
 } );
 
-gulp.task( 'test', [ 'build' ], shell.task( [
-	'npm test'
-], {
-	ignoreErrors: true
-} ) );
-
 gulp.task( 'watch', function () {
-	gulp.watch( [ './src/**/*.js' ], [ 'scriptsApp' ] );
-	gulp.watch( [ './test/**/*' ], [ 'test' ] );
-	gulp.watch( [ './gulpfile.js' ], [ 'default' ] );
+	gulp.watch( [ './src/**/*.js' ], [ 'scripts' ] );
 } );
 
-gulp.task( 'default', [ 'build', 'minify', 'test' ] );
+gulp.task( 'default', [ 'build', 'minify' ] );
 gulp.task( 'build', [ 'scripts' ] );
-gulp.task( 'scripts', [ 'scriptsApp' ] );
-gulp.task( 'minify', [ 'scriptsAppMinify' ] );
+gulp.task( 'minify', [ 'scripts/minify' ] );
 gulp.task( 'run', [ 'default', 'watch' ] );

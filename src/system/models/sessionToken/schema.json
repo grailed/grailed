@@ -1,0 +1,8 @@
+{
+	"properties": {
+		"token": "string",
+		"userId": "string",
+		"date": "date",
+		"expires": "date"
+	}
+}

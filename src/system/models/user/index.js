@@ -1,0 +1,1 @@
+module.exports = grailed.module.moldy.extend( 'user', require( './schema' ) );

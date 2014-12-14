@@ -1,0 +1,128 @@
+#!/usr/bin/env node
+
+var _ = require( 'underscore' ),
+	async = require( 'async' ),
+	cwd = process.cwd(),
+	dumpFolder = 'migrations/dump',
+	is = require( 'sc-is' ),
+	MongoClient = require( 'mongodb' ).MongoClient,
+	ObjectID = require( 'mongodb' ).ObjectID,
+	path = require( 'path' );
+
+var getIdFromData = function ( _data ) {
+	var id = _data.id || ( _data._id && _data._id.$oid ? _data._id.$oid : null );
+	return id ? ObjectID( id ) : null;
+}
+
+var done = function ( _next ) {
+	return function ( _error ) {
+		if ( _error ) console.error( _error );
+		_next();
+	}
+}
+
+exports.up = function ( _filename, _middlware, _next ) {
+	var middlware = is.array( _middlware ) ? _middlware : [],
+		data = require( path.join( cwd, dumpFolder, _.last( _filename.split( '/' ) ) + 'on' ) ),
+		collections = _.keys( data );
+
+	var tasks = [ database.connect ].concat( collections.map( function ( _collection ) {
+		return database.put( _collection, data[ _collection ] );
+	} ), middlware );
+
+	async.waterfall( tasks, done( _.last( arguments ) ) );
+};
+
+exports.down = function ( _filename, _middlware, _next ) {
+	var middlware = is.array( _middlware ) ? _middlware : [],
+		data = require( path.join( cwd, dumpFolder, _.last( _filename.split( '/' ) ) + 'on' ) ),
+		collections = _.keys( data );
+
+	var tasks = [ database.connect ].concat( collections.map( function ( _collection ) {
+		return database.remove( _collection, data[ _collection ] );
+	} ), middlware );
+
+	async.waterfall( tasks, done( _.last( arguments ) ) );
+};
+
+exports.merge = function ( _filename, _middlware, _next ) {
+
+}
+
+exports.insert = function ( _filename, _middlware, _next ) {
+
+}
+
+var database = {
+
+	connect: function ( _done ) {
+		var databaseConfig = require( path.join( __dirname, '../src/config/database' ) );
+		MongoClient.connect( 'mongodb://127.0.0.1:27017/' + databaseConfig.databaseName, function ( _error, _db ) {
+			exports.db = _db;
+			_done( _error );
+		} );
+	},
+
+	disconnect: function () {
+		var cb = _.last( arguments );
+		exports.db && exports.db.close ? exports.db.close( cb ) : cb();
+	},
+
+	drop: function ( _collection ) {
+		return function ( _done ) {
+			exports.db.collection( _collection ).drop( function () {
+				_done();
+			} );
+		}
+	},
+
+	insert: function ( _collection, _data, _mergeIfExists ) {
+		return function ( _done ) {
+			var collection = exports.db.collection( _collection ),
+				data = is.a.string( _data ) ? require( _data ) : _data;
+
+			async.eachSeries( _.toArray( data ), function ( _data, _next ) {
+				var id = getIdFromData( _data );
+
+				if ( !id ) return collection.insert( _data, _next );
+
+				collection.findOne( {
+					_id: id
+				}, function ( _error, _document ) {
+					if ( !_document ) {
+						_data._id = id;
+						collection.insert( _data, _next );
+					} else if ( _mergeIfExists ) {
+						_data._id = id;
+						collection.save( _data, _next );
+					} else {
+						_next();
+					}
+				} );
+
+			}, done( _done ) );
+		}
+	},
+
+	put: function ( _collection, _data ) {
+		return database.insert( _collection, _data, true );
+	},
+
+	remove: function ( _collection, _data ) {
+		return function ( _done ) {
+			var collection = exports.db.collection( _collection ),
+				data = is.a.string( _data ) ? require( _data ) : _data;
+
+			async.eachSeries( _.toArray( data ), function ( _data, _next ) {
+				var id = getIdFromData( _data );
+
+				if ( !id ) return _next();
+
+				collection.remove( {
+					_id: id
+				}, _next );
+
+			}, done( _done ) );
+		}
+	}
+};

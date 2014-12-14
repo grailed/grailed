@@ -5,7 +5,10 @@ var emitter = require( 'emitter-component' ),
 var Grail = extendify( {
 
 	init: function () {
-		var self = this;
+		var globalIsWindow = 'undefined' !== typeof window,
+			globalIsGlobal = 'undefined' !== typeof global,
+			glb = globalIsWindow ? window : globalIsGlobal ? global : undefined,
+			self = glb.grailed = this;
 
 		Object.defineProperties( self, {
 			__base: {
@@ -39,6 +42,10 @@ var Grail = extendify( {
 				value: {},
 				writable: true
 			},
+			__service: {
+				value: {},
+				writable: true
+			},
 			classes: {
 				get: function () {
 					return this.__class;
@@ -68,12 +75,16 @@ var Grail = extendify( {
 				get: function () {
 					return this.__route;
 				}
+			},
+			services: {
+				get: function () {
+					return this.__service;
+				}
 			}
 		} );
 
-		self.class.extend = function ( _class ) {
-			return self.__base.extend( _class );
-		};
+		// In a node env, setup the app
+		if ( globalIsGlobal ) self.system = require( './system' )( self );
 
 	},
 
@@ -115,15 +126,6 @@ var Grail = extendify( {
 		var self = this;
 
 		if ( is.not.nullOrUndefined( _controller ) ) {
-
-			// If this is an instance of `sc-extendify` and has not been
-			// instantiated, instantiate it
-			if ( is.a.func( _controller ) && is.a.func( _controller.extend ) ) {
-				try {
-					_controller = new _controller();
-				} catch ( e ) {}
-			}
-
 			self.__controller[ _name ] = _controller;
 			Object.defineProperty( self.controller, _name, {
 				get: function () {
@@ -150,17 +152,14 @@ var Grail = extendify( {
 		return self;
 	},
 
-	end: function ( _callback ) {
-		var self = this;
-
-		self.emit( 'end' );
-
-		if ( typeof _callback === 'function' ) {
-			_callback();
-		}
-
-		return self;
-	},
+	// end: function ( _callback ) {
+	// 	var self = this;
+	// 	self.emit( 'end' );
+	// 	if ( typeof _callback === 'function' ) {
+	// 		_callback();
+	// 	}
+	// 	return self;
+	// },
 
 	model: function ( _name, _schema ) {
 		var self = this;
@@ -213,6 +212,23 @@ var Grail = extendify( {
 		return self;
 	},
 
+	service: function ( _name, _service ) {
+		var self = this;
+
+		if ( is.not.nullOrUndefined( _service ) ) {
+			self.__service[ _name ] = _service;
+			Object.defineProperty( self.service, _name, {
+				get: function () {
+					return self.__service[ _name ];
+				}
+			} );
+		} else {
+			return self.__service[ _name ];
+		}
+
+		return self;
+	},
+
 	set: function ( _key, _value ) {
 		var self = this;
 
@@ -223,6 +239,10 @@ var Grail = extendify( {
 		}
 
 		return self;
+	},
+
+	start: function () {
+		this.emit( 'start' );
 	}
 
 } );

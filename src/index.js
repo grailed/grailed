@@ -1,8 +1,8 @@
-var Grail = require( './grail' ),
+var Grailed = require( './grailed' ),
 	GrailedApp = {};
 
 GrailedApp.create = function () {
-	return new Grail();
+	return new Grailed();
 };
 
 module.exports = GrailedApp;

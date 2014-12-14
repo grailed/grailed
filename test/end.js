@@ -1,21 +1,21 @@
 var Grailed = require( '../src' );
 
-describe( 'end', function () {
+describe( 'start', function () {
 
 	var app = Grailed.create();
 
-	it( 'end() should emit an `end` event', function ( _done ) {
-		app.once( 'end', _done );
-		app.end();
+	it( 'start() should emit an `start` event', function ( _done ) {
+		app.once( 'start', _done );
+		app.start();
 	} );
 
-	it( 'end() should provide a callback', function ( _done ) {
+	it( 'start() should provide a callback', function ( _done ) {
 		[ {},
 			[], null, undefined
 		].forEach( function ( _invalidArgument ) {
-			app.end( _invalidArgument );
+			app.start( _invalidArgument );
 		} );
-		app.end( _done );
+		app.start( _done );
 	} );
 
 } );
