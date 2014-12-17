@@ -89,9 +89,21 @@ module.exports = function ( grailed ) {
 
 
 		/**
-		 * Setup Express
+		 * Execute the Bootstrap hook and then setup Express
 		 */
-		require( '../config/express' );
+		var bootstrap;
+
+		try {
+			bootstrap = require( path.join( process.env.GRAILED_PATH_CONFIG, 'bootstrap' ) );
+		} catch ( e ) {};
+
+		if ( bootstrap ) {
+			bootstrap( function () {
+				require( '../config/express' );
+			} );
+		} else {
+			require( '../config/express' );
+		}
 
 	} );
 

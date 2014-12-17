@@ -45,14 +45,6 @@ exports.down = function ( _filename, _middlware, _next ) {
 	async.waterfall( tasks, done( _.last( arguments ) ) );
 };
 
-exports.merge = function ( _filename, _middlware, _next ) {
-
-}
-
-exports.insert = function ( _filename, _middlware, _next ) {
-
-}
-
 var database = {
 
 	connect: function ( _done ) {

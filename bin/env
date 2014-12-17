@@ -24,6 +24,7 @@ grailedDefaults = {
 	PATH_SRC: path.join( cwd, 'src' ),
 	PATH_TEST: path.join( cwd, 'test' ),
 	SESSION_TOKEN_EXPIRE_LENGTH: ( 1000 * 60 * 60 * 24 * 30 ),
+	TEST_TEARDOWN_DO_NOT_DROP_DB: 'false',
 	VIEW_ENGINE: 'ejs'
 
 };

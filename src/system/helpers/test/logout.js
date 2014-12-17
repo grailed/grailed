@@ -1,6 +1,6 @@
 var _ = require( 'underscore' );
 
-module.exports = function ( _request, _email ) {
+module.exports = function ( _request ) {
 	var config = require( grailed.env.PATH_TEST + '/api/config' );
 
 	return function () {

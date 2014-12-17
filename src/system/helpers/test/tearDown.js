@@ -9,7 +9,9 @@ module.exports = function ( _done ) {
 	async.waterfall( [
 
 		function ( _wcallback ) {
-			sh.run( 'mongo ' + grailed.database.databaseName + ' --eval \"db.dropDatabase()\" > /dev/null' );
+			if ( grailed.env.TEST_TEARDOWN_DO_NOT_DROP_DB !== 'true' ) {
+				sh.run( 'mongo ' + grailed.database.databaseName + ' --eval \"db.dropDatabase()\" > /dev/null' );
+			}
 			_wcallback();
 		},
 
