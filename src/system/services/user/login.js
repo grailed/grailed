@@ -1,10 +1,9 @@
-var _ = require( 'underscore' ),
-	async = require( 'async' ),
-	cast = require( 'sc-cast' ),
-	is = require( 'sc-is' );
-
 module.exports = function ( _email, _password, _options, _callback ) {
 	var self = this,
+		_ = require( 'underscore' ),
+		async = require( 'async' ),
+		cast = require( 'sc-cast' ),
+		is = require( 'sc-is' ),
 		SessionToken = grailed.model.sessionToken,
 		User = grailed.model.user,
 		options = _.extend( {}, _options );

@@ -1,9 +1,8 @@
-var _ = require( 'underscore' ),
-	async = require( 'async' ),
-	hasKey = require( 'sc-haskey' );
-
 module.exports = function ( _loggedInUser, _options, _callback ) {
 	var self = this,
+		_ = require( 'underscore' ),
+		async = require( 'async' ),
+		hasKey = require( 'sc-haskey' ),
 		SessionToken = grailed.model.sessionToken,
 		options = _.extend( {}, _options );
 

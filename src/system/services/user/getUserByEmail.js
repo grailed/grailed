@@ -1,8 +1,6 @@
-var async = require( 'async' ),
-	is = require( 'sc-is' );
-
 module.exports = function ( _email, _callback ) {
-	var self = this,
+	var async = require( 'async' ),
+		is = require( 'sc-is' ),
 		User = grailed.model.user;
 
 	async.waterfall( [

@@ -1,11 +1,11 @@
-var async = require( 'async' ),
-	cast = require( 'sc-cast' ),
-	is = require( 'sc-is' );
-
 module.exports = function ( _sessionToken, _callback ) {
+
 	if ( !_sessionToken ) return _callback();
 
 	var self = this,
+		async = require( 'async' ),
+		cast = require( 'sc-cast' ),
+		is = require( 'sc-is' ),
 		SessionToken = grailed.model.sessionToken,
 		User = grailed.model.user;
 

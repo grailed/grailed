@@ -1,7 +1,6 @@
-var async = require( 'async' );
-
 module.exports = function ( _loggedInUser, _callback ) {
-	var self = this;
+	var self = this,
+		async = require( 'async' );
 
 	async.waterfall( [
 

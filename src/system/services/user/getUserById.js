@@ -1,7 +1,6 @@
-var async = require( 'async' );
-
 module.exports = function ( _userId, _callback ) {
 	var self = this,
+		async = require( 'async' ),
 		User = grailed.model.user;
 
 	async.waterfall( [

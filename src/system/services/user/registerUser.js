@@ -1,8 +1,7 @@
-var _ = require( 'underscore' ),
-	async = require( 'async' );
-
 module.exports = function ( _user, _callback ) {
-	var self = this;
+	var self = this,
+		_ = require( 'underscore' ),
+		async = require( 'async' );
 
 	async.waterfall( [
 
