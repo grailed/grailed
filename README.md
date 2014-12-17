@@ -21,6 +21,7 @@ Grailed is a skinny framework using a divorced client & api pattern to help glue
     - [Components](#components)
     - [Dependencies](#dependencies)
     - [Views](#views)
+- [Public](#public)
 - [Tasks](#tasks)
 - [Migrations](#migrations)
 - [Tests](#tests)
@@ -359,6 +360,10 @@ module.exports = function ( _req, _res, _next ) {
 ```
 
 Where `main.ejs` is stored `/src/client/views/main.ejs`
+
+### Public
+
+The public folder is where Express serves static content from.
 
 ### Tasks
 
