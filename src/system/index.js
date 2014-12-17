@@ -14,6 +14,7 @@ module.exports = function ( grailed ) {
 	grailed.module( 'moldy', require( 'moldy' ) );
 	grailed.set( 'env', require( '../config/environment' ) );
 	grailed.set( 'database', require( '../config/database' ) );
+	grailed.set( 'i18n', require( '../config/i18n' ) );
 	grailed.config( 'moldy', require( '../config/moldy' ) );
 
 
