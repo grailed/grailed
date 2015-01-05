@@ -1,5 +1,4 @@
-var app,
-	async = require( 'async' ),
+var async = require( 'async' ),
 	express = require( 'express' ),
 	is = require( 'sc-is' ),
 	path = require( 'path' );
@@ -115,7 +114,7 @@ async.waterfall( [
 
 					if ( app.get( 'env' ) !== 'production' ) {
 						if ( status === 500 ) {
-							grailed.system.helpers.error( '500', err );
+							grailed.service.system.error( 500, err );
 						}
 					}
 
@@ -135,7 +134,7 @@ async.waterfall( [
 				_next();
 				break;
 
-			};
+			}
 
 		}, _next );
 	},
