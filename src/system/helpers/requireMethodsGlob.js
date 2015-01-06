@@ -18,12 +18,20 @@ module.exports = function () {
 				try {
 					obj[ method ] = require( _file );
 				} catch ( e ) {
-					glob.sync( _file + '/*' ).forEach( function ( _file ) {
-						var subMethod = getMethod( _file );
-						if ( subMethod ) {
-							obj[ method ][ subMethod ] = require( _file );
-						}
-					} );
+					//Check if its a directory.
+					var files = glob.sync( _file + '/*' );
+					if ( files.length > 0 ) {
+						files.forEach( function ( _file ) {
+							var subMethod = getMethod( _file );
+							if ( subMethod ) {
+								obj[ method ][ subMethod ] = require( _file );
+							}
+						} );
+
+					} else {
+						console.log( 'ERROR requiring', _file, e.stack );
+						throw e;
+					}
 				}
 			}
 		} );
