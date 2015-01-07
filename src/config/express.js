@@ -119,6 +119,7 @@ async.waterfall( [
 
 					if ( app.get( 'env' ) !== 'production' ) {
 						if ( status === 500 ) {
+							console.error( 'Unexpected server error:', err.stack );
 							grailed.service.system.error( 500, err );
 						}
 					}
