@@ -1,7 +1,8 @@
 var async = require( 'async' ),
 	express = require( 'express' ),
 	is = require( 'sc-is' ),
-	path = require( 'path' );
+	path = require( 'path' ),
+	error = require( path.join( grailed.env.PATH_GRAILED, '/src/system/helpers/error' ) )
 
 var app = express();
 
@@ -80,6 +81,10 @@ async.waterfall( [
 							routeArgs = [ _route ];
 
 						routeControllers.forEach( function ( _routeController ) {
+							if ( !_routeController ) {
+								error( 'Undefined middleware on route ' + _method.toUpperCase() + ' ' + _route + ' index: ' + routeControllers.indexOf( _routeController ) );
+								//Will throw undefined error on the next line.
+							}
 							routeArgs.push( _routeController.bind( grailed.routes[ _route ] ) );
 						} );
 

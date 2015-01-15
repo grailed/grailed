@@ -29,7 +29,7 @@ module.exports = function () {
 						} );
 
 					} else {
-						console.log( 'ERROR requiring', _file, e.stack );
+						console.log( 'ERROR requiring', _file );
 						throw e;
 					}
 				}
