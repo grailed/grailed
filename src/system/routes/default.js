@@ -1,5 +1,4 @@
-module.exports = {
-	'/': {
-		get: grailed.controller.view.main
-	}
-};
+module.exports = [ {
+	route: '/',
+	get: grailed.controller.view.main
+} ];

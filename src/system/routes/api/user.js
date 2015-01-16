@@ -1,17 +1,16 @@
 var user = grailed.controller.user;
 
-module.exports = {
-	'/api/user': {
-		get: [ user.isLoggedIn, user.getLoggedInUser ],
-		put: [ user.isLoggedIn, user.updateUser ]
-	},
-	'/api/user/login': {
-		post: user.login
-	},
-	'/api/user/logout': {
-		post: user.logout
-	},
-	'/api/user/register': {
-		post: user.registerUser
-	}
-};
+module.exports = [ {
+	route: '/api/user',
+	get: [ user.isLoggedIn, user.getLoggedInUser ],
+	put: [ user.isLoggedIn, user.updateUser ]
+}, {
+	route: '/api/user/login',
+	post: user.login
+}, {
+	route: '/api/user/logout',
+	post: user.logout
+}, {
+	route: '/api/user/register',
+	post: user.registerUser
+} ];

@@ -39,7 +39,7 @@ var Grail = extendify( {
 				writable: true
 			},
 			__route: {
-				value: {},
+				value: [],
 				writable: true
 			},
 			__service: {

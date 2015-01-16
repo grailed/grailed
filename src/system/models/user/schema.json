@@ -3,6 +3,7 @@
 		"active": "boolean",
 		"email": "string",
 		"name": "string",
+		"username": "string",
 		"password": "string",
 		"salt": "string"
 	}

@@ -57,28 +57,21 @@ module.exports = function ( grailed ) {
 		/**
 		 * Routes
 		 */
-		system.route = {};
+		system.route = [];
 
-		var setupRoute = function ( _route ) {
-			var route = is.an.object( _route ) ? _route : {};
-
-			Object.keys( route ).forEach( function ( _routeKey ) {
-				var routeGroup = is.an.object( route[ _routeKey ] ) ? route[ _routeKey ] : {},
-					routeSet;
-
-				Object.keys( routeGroup ).forEach( function ( _route ) {
-					if ( !routeSet && ( is.a.func( routeGroup[ _route ] ) || is.an.array( routeGroup[ _route ] ) ) ) {
-						routeSet = true;
-					}
+		var setupRoute = function ( _routesBatch ) {
+			if ( is.an.object( _routesBatch ) ) {
+				Object.keys( _routesBatch ).forEach( function ( _routeKey ) {
+					setupRoute( _routesBatch[ _routeKey ] );
 				} );
-
-				if ( routeSet === true ) {
-					system.route = merge( system.route, route );
-				}
-				if ( is.not.empty( routeGroup ) && routeSet !== true ) {
-					setupRoute( routeGroup );
-				}
-			} );
+				return;
+			} else if ( is.an.array( _routesBatch ) ) {
+				_routesBatch.forEach( function ( _route ) {
+					system.route.push( _route );
+				} );
+			} else {
+				throw new Error( 'Unknown route type. You must export an array.' );
+			}
 		};
 
 		setupRoute( requireMethods( __dirname + '/routes/*' ) || {} );
