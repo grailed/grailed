@@ -88,7 +88,7 @@ async.waterfall( [
 
 							routeControllers.forEach( function ( _routeController ) {
 								if ( !_routeController ) {
-									error( 'Undefined middleware on route ' + _method.toUpperCase() + ' ' + route + ' index: ' + routeControllers.indexOf( _routeController ) );
+									error( 'Undefined middleware on route ' + _method.toUpperCase() + ' ' + routePath + ' index: ' + routeControllers.indexOf( _routeController ) );
 									//Will throw undefined error on the next line.
 								}
 								routeArgs.push( _routeController.bind( grailed.routes[ route ] ) );
