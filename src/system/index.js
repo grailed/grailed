@@ -38,12 +38,11 @@ module.exports = function ( grailed ) {
 				var entity = construct[ _entity ];
 
 				Object.keys( entity ).forEach( function ( _key ) {
-					entityKeys = is.an.object( entity[ _key ] ) ? Object.keys( entity[ _key ] ) : [];
 					methods[ _key ] = methods[ _key ] || {};
-					entityKeys.forEach( function ( _entityKey ) {
-						var method = entity[ _key ][ _entityKey ];
-						methods[ _key ][ _entityKey ] = method;
-					} );
+					for ( var entityKey in entity[ _key ] ) {
+						var method = entity[ _key ][ entityKey ];
+						methods[ _key ][ entityKey ] = method;
+					}
 				} );
 			} );
 
