@@ -4,7 +4,7 @@ var async = require( 'async' ),
 	path = require( 'path' ),
 	error = require( path.join( grailed.env.PATH_GRAILED, '/src/system/helpers/error' ) )
 
-var app = express();
+var app = grailed.express = express();
 
 async.waterfall( [
 
