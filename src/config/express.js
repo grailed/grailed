@@ -18,6 +18,18 @@ async.waterfall( [
 	},
 
 	/**
+	 * Response Locals
+	 */
+	function ( _next ) {
+		app.use( function ( req, res, next ) {
+			res.locals.grailed = grailed;
+			res.req = req;
+			next();
+		} );
+		_next();
+	},
+
+	/**
 	 * Middlware
 	 */
 	function ( _next ) {
@@ -69,6 +81,26 @@ async.waterfall( [
 			case 'getUserBySessionToken':
 				app.use( method || grailed.controller.user.getUserBySessionToken );
 				_next();
+				break;
+
+			case 'i18n':
+				try {
+
+					if ( method ) {
+						app.use( method );
+					} else {
+						var i18n = grailed.i18n = require( 'i18n' ),
+							i18nConfig = require( path.join( grailed.env.PATH_CONFIG, 'i18n' ) );
+
+						if ( is.not.an.object( i18nConfig ) ) return _next();
+						i18n.configure( i18nConfig );
+						app.use( i18n.init );
+					}
+					_next();
+				} catch ( e ) {
+					console.log( 'error', e );
+					_next();
+				}
 				break;
 
 			case 'routes':
