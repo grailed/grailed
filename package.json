@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha bin/test"
   },
   "author": "David Tsuji",
   "license": "MIT",
@@ -29,11 +29,12 @@
     "execSync": "^1.0.2",
     "express": "^4.10.2",
     "glob": "^4.3.1",
+    "grailed-module-system": "^1.0.0",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.4.2",
     "gulp-jshint": "^1.9.0",
     "gulp-less": "^2.0.1",
-    "gulp-livereload": "^2.1.1",
+    "gulp-livereload": "^3.6.0",
     "gulp-rename": "^1.2.0",
     "gulp-shell": "^0.2.10",
     "gulp-uglify": "^1.0.1",
@@ -45,6 +46,7 @@
     "moldy-mongo-adapter": "^1.2.2",
     "morgan": "^1.5.0",
     "request": "^2.47.0",
+    "require-directory": "^2.0.0",
     "sc-cast": "0.0.8",
     "sc-extendify": "0.0.0",
     "sc-haskey": "0.0.2",

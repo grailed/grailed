@@ -2,7 +2,7 @@
 
 var config = {},
 	cwd = process.cwd(),
-	grailedrc,
+	grailedrc = {},
 	grailedDefaults,
 	path = require( 'path' );
 

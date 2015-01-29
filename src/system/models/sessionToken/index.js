@@ -1,1 +1,0 @@
-module.exports = grailed.module.moldy.extend( 'sessionToken', require( './schema' ) );

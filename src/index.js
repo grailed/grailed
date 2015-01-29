@@ -1,8 +1,20 @@
-var Grailed = require( './grailed' ),
-	GrailedApp = {};
+var async = require( 'async' ),
+	emitter = require( 'emitter-component' );
 
-GrailedApp.create = function () {
-	return new Grailed();
-};
+global.requireDirectory = require( 'require-directory' );
+global.grailed = grailed = requireDirectory( module, __dirname + '/grailed' );
 
-module.exports = GrailedApp;
+emitter( grailed );
+
+async.waterfall( [
+
+	grailed.config.environment.init,
+	grailed.config.database.init,
+	grailed.config.moldy.init,
+	grailed.config.modules.init,
+	grailed.config.routes.init,
+	grailed.config.express.init
+
+], function ( _error ) {
+	grailed.emit( 'ready' );
+} );
