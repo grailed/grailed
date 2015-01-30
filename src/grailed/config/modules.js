@@ -13,7 +13,12 @@ module.exports = {
 				var directory = path.join( process.env.GRAILED_PATH_API, 'modules', _directory );
 
 				if ( !fs.statSync( directory ).isDirectory() ) return;
-				grailed.use( requireDirectory( module, directory ) );
+				if ( /^\./.test( _directory ) ) return;
+
+				grailed.use( requireDirectory( module, directory, {
+					blacklist: /\/\.[\w]+]/
+				} ) );
+
 			} );
 		} catch ( e ) {
 			console.error( e, e.stack );
