@@ -21,6 +21,6 @@ module.exports = {
 
 		grailed.database = merge( true, defaultDatabaseConfig, appDatabase.default, appDatabase[ process.env.NODE_ENV ] );
 
-		_next();
+		_next && _next();
 	}
 };

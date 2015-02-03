@@ -23,6 +23,6 @@ module.exports = {
 
 		grailed.env = environment;
 
-		_next();
+		_next && _next();
 	}
 };

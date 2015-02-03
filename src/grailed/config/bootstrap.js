@@ -7,12 +7,12 @@ module.exports = {
 			appBootstrap = require( path.join( process.env.GRAILED_PATH_CONFIG, 'bootstrap' ) );
 			appBootstrap( function () {
 				grailed.emit( 'bootstrap' );
-				_next();
+				_next && _next();
 			} );
 		} catch ( e ) {
 			console.warn( '`/config/bootstrap.js` is missing', e );
 			grailed.emit( 'bootstrap' );
-			_next();
+			_next && _next();
 		}
 	}
 };

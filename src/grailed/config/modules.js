@@ -25,6 +25,6 @@ module.exports = {
 			return;
 		}
 
-		_next();
+		_next && _next();
 	}
 };

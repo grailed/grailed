@@ -87,6 +87,6 @@ module.exports = {
 		moldy.adapters.mongodb.config.databaseName = db.databaseName;
 		moldy.adapters.mongodb.config.connectionString = dbAddress;
 
-		_next();
+		_next && _next();
 	}
 };
