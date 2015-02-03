@@ -39,6 +39,7 @@
     "gulp-shell": "^0.2.10",
     "gulp-uglify": "^1.0.1",
     "i18n": "^0.5.0",
+    "include-all": "^0.1.6",
     "jshint-stylish": "^1.0.0",
     "mkdirp": "^0.5.0",
     "mocha": "^1.18.2",

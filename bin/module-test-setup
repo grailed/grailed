@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+/**
+ * Test Globals
+ */
+global._ = require( 'underscore' );
+global.async = require( 'async' );
+global.path = require( 'path' );
+global.request = require( 'request' ).defaults( { json: true, jar: true } );
+global.should = require( 'should' );
+global.grailed = global.grailed || {};
+global.pkg = require(path.join(process.cwd(), 'package.json'));
+global.test = require('include-all')({
+      dirname: path.join(process.cwd(), 'test/helpers'),
+      filter: /(.+)\.js$/
+});
+global.test.setup = require(path.join(process.cwd(), 'test/setup'));
+global.test.tearDown = require(path.join(process.cwd(), 'test/tearDown'));
+
+
+/**
+ * Environment
+ */
+process.env.NODE_ENV = 'test';
+process.env.PORT = process.env.PORT || 3000;
+process.env.SALT = process.env.SALT || 'Cu8wI9Ox6teeF5nUfs1of7uM0Den8El8eV2jewm7uD9Kia9Hec';
+
+
+/**
+ * Grailed
+ */
+grailed.database = {
+	databaseName: pkg.name + '-test',
+	username: '',
+	password: '',
+	primaryServer: '127.0.0.1',
+	primaryServerPort: '27017',
+	secondaryServer: '',
+	secondaryServerPort: ''
+};
+
+
+/**
+ * Connect Moldy
+ */
+require( path.join( '../src/grailed/config/moldy' ) ).init();
