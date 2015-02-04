@@ -23,7 +23,7 @@ global.test.tearDown = require(path.join(process.cwd(), 'test/tearDown'));
  */
 process.env.NODE_ENV = 'test';
 process.env.PORT = process.env.PORT || 3000;
-process.env.SALT = process.env.SALT || 'Cu8wI9Ox6teeF5nUfs1of7uM0Den8El8eV2jewm7uD9Kia9Hec';
+process.env.GRAILED_SALT = process.env.GRAILED_SALT || 'Cu8wI9Ox6teeF5nUfs1of7uM0Den8El8eV2jewm7uD9Kia9Hec';
 
 
 /**
