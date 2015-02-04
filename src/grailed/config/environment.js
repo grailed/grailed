@@ -6,7 +6,8 @@ module.exports = {
 
 		try {
 			appEnvironment = require( path.join( process.env.GRAILED_PATH_CONFIG, 'environment' ) );
-		} catch ( e ) {}
+		} catch ( e ) {
+		}
 
 		var defaultEnvironmentConfig = {
 			SALT: 'GofDgugjnAEiPCtoeQTbUG2wVJR2JrQEMzBxodwwBDMEPuJnNh'
@@ -19,6 +20,10 @@ module.exports = {
 			if ( /^GRAILED_/.test( _key ) ) {
 				environment[ _key.replace( /^GRAILED_/, '' ) ] = process.env[ _key ];
 			}
+		} );
+
+		Object.keys( environment ).forEach( function ( _key ) {
+			process.env[ 'GRAILED_' + _key ] = environment[ _key ];
 		} );
 
 		grailed.env = environment;
