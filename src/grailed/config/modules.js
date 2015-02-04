@@ -4,7 +4,7 @@ module.exports = {
 			fs = require( 'fs' ),
 			path = require( 'path' );
 
-		grailed.use( require( 'grailed-module-system' ) );
+		grailed.use( require( 'grailed-module-system' )() );
 
 		try {
 			var moduleFolders = fs.readdirSync( path.join( process.env.GRAILED_PATH_API, 'modules' ) );
@@ -15,10 +15,7 @@ module.exports = {
 				if ( !fs.statSync( directory ).isDirectory() ) return;
 				if ( /^\./.test( _directory ) ) return;
 
-				grailed.use( requireDirectory( module, directory, {
-					blacklist: /\/\.[\w]+]/
-				} ) );
-
+				grailed.use( require( directory )() );
 			} );
 		} catch ( e ) {
 			console.error( e, e.stack );

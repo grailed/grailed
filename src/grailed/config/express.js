@@ -2,6 +2,7 @@ module.exports = {
 	init: function ( _next ) {
 		var async = require( 'async' ),
 			express = require( 'express' ),
+			hasKey = require( 'sc-haskey' ),
 			is = require( 'sc-is' ),
 			path = require( 'path' ),
 			error = grailed.system.helpers.error;
@@ -32,9 +33,11 @@ module.exports = {
 					function ( _next ) {
 					var middleware = require( path.join( grailed.env.PATH_CONFIG, 'middleware' ) );
 
-					async.eachSeries( middleware, function ( _middleware, _next ) {
-						var name = is.a.string( _middleware.name ) ? _middleware.name : '',
-							method = is.a.func( _middleware.method ) ? _middleware.method : null;
+					middleware.forEach( function ( _middleware ) {
+						var method = is.a.func( _middleware.method ) ? _middleware.method : null,
+							router = hasKey( _middleware, 'method.router', 'function' ) ? _middleware.method.router : null,
+							baseUrl = hasKey( _middleware, 'baseUrl', 'string' ) ? _middleware.baseUrl : '',
+							name = hasKey( _middleware, 'method.name', 'string' ) ? _middleware.method.name : is.a.string( _middleware.name ) ? _middleware.name : '';
 
 						switch ( name ) {
 
@@ -46,7 +49,6 @@ module.exports = {
 								} else if ( !/^(test)$/i.test( process.env.NODE_ENV ) ) {
 									app.use( logger( 'dev' ) );
 								}
-								_next();
 								break;
 
 							case 'bodyParser':
@@ -60,19 +62,12 @@ module.exports = {
 									} ) );
 									app.use( bodyParser.json() );
 								}
-								_next();
 								break;
 
 							case 'cookieParser':
 								var cookieParser = require( 'cookie-parser' );
 
 								app.use( method || cookieParser() );
-								_next();
-								break;
-
-							case 'grailed':
-								app.use( method || grailed.module.system.middleware.grailed );
-								_next();
 								break;
 
 							case 'i18n':
@@ -84,56 +79,17 @@ module.exports = {
 										var i18n = grailed.i18n = require( 'i18n' ),
 											i18nConfig = require( path.join( grailed.env.PATH_CONFIG, 'i18n' ) );
 
-										if ( is.not.an.object( i18nConfig ) ) return _next();
+										if ( is.not.an.object( i18nConfig ) ) return;
 										i18n.configure( i18nConfig );
 										app.use( i18n.init );
 									}
-									_next();
 								} catch ( e ) {
 									console.log( 'error', e );
-									_next();
 								}
-								break;
-
-							case 'routes':
-								var router = express.Router();
-
-								var initRoute = function ( _route ) {
-									var routePath = _route.route;
-									Object.keys( _route ).forEach( function ( _method ) {
-										if ( _method === 'route' || _method === 'methods' ) {
-											return;
-										}
-										var routeController = _route[ _method ],
-											routeControllers = Array.isArray( routeController ) ? routeController : [ routeController ],
-											routeArgs = [ routePath ];
-
-										routeControllers.forEach( function ( _routeController ) {
-											if ( !_routeController ) {
-												error( 'Undefined middleware on route ' + _method.toUpperCase() + ' ' + routePath + ' index: ' + routeControllers.indexOf( _routeController ) );
-												//Will throw undefined error on the next line.
-											}
-											routeArgs.push( _routeController.bind( grailed.routes[ _route ] ) );
-										} );
-
-										router[ _method ].apply( router, routeArgs );
-									} );
-								};
-
-								for ( var i = 0; i < grailed.routes.length; i++ ) {
-									initRoute( grailed.routes[ i ] );
-								}
-
-								grailed.router = router;
-								app.use( router );
-
-								_next();
-
 								break;
 
 							case 'static':
 								app.use( method || express.static( grailed.env.PATH_PUBLIC ) );
-								_next();
 								break;
 
 							case '404Handler':
@@ -142,7 +98,6 @@ module.exports = {
 									if ( req instanceof Error ) return next( err );
 									grailed.module.system.controller.error[ '404' ].apply( this, arguments );
 								} );
-								_next();
 
 								break;
 
@@ -165,18 +120,21 @@ module.exports = {
 										}
 									} );
 								} );
-								_next();
 
 								break;
 
 							default:
-								if ( is.a.func( method ) ) app.use( method );
-								_next();
+								if ( !grailed.module[ name ] ) grailed.module[ name ] = _middleware.method;
+								if ( is.a.func( method ) ) {
+									app.use( baseUrl, method );
+								} else if ( router ) {
+									app.use( baseUrl, router );
+								}
 								break;
-
 						}
+					} );
 
-					}, _next );
+					_next();
 				},
 
 				/**
