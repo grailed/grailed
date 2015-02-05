@@ -51,7 +51,8 @@
     "sc-is": "0.0.3",
     "sc-merge": "^1.0.1",
     "should": "^4.2.1",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "underscore.string": "^3.0.2"
   },
   "devDependencies": {
     "mongodb": "^1.4.30"
