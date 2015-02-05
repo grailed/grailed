@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 var path = require( 'path' ),
-    env = require('./env'),
-    requireDirectory = require('require-directory');
+	env = require( './env' ),
+	requireDirectory = require( 'require-directory' );
 
-should = require('should');
+should = require( 'should' );
 
-require(path.join(process.cwd(), 'src'));
+require( path.join( process.cwd(), 'src' ) );
 
-async = require('async');
-test = requireDirectory(module, path.join(process.cwd(), 'test/helpers'));
+async = require( 'async' );
+test = requireDirectory( module, path.join( process.cwd(), 'test/helpers' ) );
 
-requireDirectory(module, path.join(process.cwd(), 'test/specs'));
+requireDirectory( module, path.join( process.cwd(), 'test/specs' ) );
