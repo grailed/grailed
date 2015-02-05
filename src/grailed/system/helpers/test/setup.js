@@ -1,10 +1,7 @@
-var _ = require( 'underscore' ),
-	async = require( 'async' ),
-	sh = require( 'execSync' );
-
 module.exports = function ( _done ) {
 	var config = require( grailed.env.PATH_TEST + '/api/config' ),
-		done = _.last( arguments ) || _.noop;
+		done = _.last( arguments ) || _.noop,
+		exec = require( 'child_process' ).exec;
 
 	async.waterfall( [
 
@@ -21,13 +18,14 @@ module.exports = function ( _done ) {
 
 		// Drop the test database
 		function ( _wcallback ) {
-			sh.run( 'mongo ' + grailed.database.databaseName + ' --eval \"db.dropDatabase()\" > /dev/null' );
-			_wcallback();
+			exec( 'mongo ' + grailed.database.databaseName + ' --eval \"db.dropDatabase()\" > /dev/null', function ( _error ) {
+				_wcallback( _error );
+			} );
 		},
 
 		// Migrate up
 		function ( _wcallback ) {
-			require( 'child_process' ).exec( 'migrate --state-file ' + '.tmp/.migrate', {
+			exec( 'migrate --state-file ' + '.tmp/.migrate', {
 				cwd: process.cwd()
 			}, function () {
 				_wcallback();
