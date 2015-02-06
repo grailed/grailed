@@ -55,6 +55,7 @@
     "underscore.string": "^3.0.2"
   },
   "devDependencies": {
+    "gulp-plumber": "^0.6.6",
     "mongodb": "^1.4.30"
   }
 }
