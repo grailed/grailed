@@ -7,6 +7,7 @@ var _ = require( 'underscore' ),
 	minifyTasks = [],
 	mkdirp = require( 'mkdirp' ),
 	path = require( 'path' ),
+	plumber = require( 'gulp-plumber' ),
 	shell = require( 'gulp-shell' ),
 	str = require( 'underscore.string' ),
 	rename = require( 'gulp-rename' ),
@@ -15,7 +16,7 @@ var _ = require( 'underscore' ),
 	uglify = require( 'gulp-uglify' );
 
 components = glob.sync( config.PATH_COMPONENTS_APP + '/*' ).filter( function ( _component ) {
-	return /[^\/]+$/.test( _component ) ? true : false;
+	return !!/[^\/]+$/.test( _component );
 } ).map( function ( _component ) {
 	var contextFolderName = _component.match( /[^\/]+$/ )[ 0 ];
 
@@ -38,7 +39,9 @@ gulp.task( 'src/client/components/scripts', function () {
 			' --outfile ' + path.join( config.PATH_COMPONENTS_PUBLIC, slugifiedAppName, slugifiedComponentName, 'scripts/index.js' );
 	} );
 
-	var stream = gulp.src( '' ).pipe( shell( browserifyCommands ) );
+	var stream = gulp.src( '' )
+		.pipe( plumber() )
+		.pipe( shell( browserifyCommands ) );
 
 	if ( GLOBAL.livereload ) stream.pipe( GLOBAL.livereload() );
 
@@ -56,6 +59,7 @@ components.forEach( function ( _component ) {
 
 	gulp.task( scriptTaskName, [ 'src/client/components/scripts' ], function () {
 		return gulp.src( path.join( config.PATH_COMPONENTS_PUBLIC, slugifiedAppName, str.slugify( _component ), 'scripts/index.js' ) )
+			.pipe( plumber() )
 			.pipe( uglify() )
 			.pipe( rename( 'index.min.js' ) )
 			.pipe( gulp.dest( path.join( config.PATH_COMPONENTS_PUBLIC, slugifiedAppName, str.slugify( _component ), 'scripts' ) ) );
@@ -70,6 +74,7 @@ components.forEach( function ( _component ) {
 
 	gulp.task( styleTaskName, function () {
 		var stream = gulp.src( path.join( config.PATH_CLIENT, 'components', _component, 'styles/index.less' ) )
+			.pipe( plumber() )
 			.pipe( less() )
 			.pipe( gulp.dest( path.join( config.PATH_COMPONENTS_PUBLIC, slugifiedAppName, str.slugify( _component ), 'styles' ) ) );
 
@@ -87,8 +92,9 @@ components.forEach( function ( _component ) {
 
 	gulp.task( assetTaskName, function () {
 		var stream = gulp.src( path.join( config.PATH_CLIENT, 'components', _component, 'assets/**/*' ), {
-				basePath: path.join( config.PATH_CLIENT, 'components', _component, 'assets' )
-			} )
+			basePath: path.join( config.PATH_CLIENT, 'components', _component, 'assets' )
+		} )
+			.pipe( plumber() )
 			.pipe( gulp.dest( path.join( config.PATH_COMPONENTS_PUBLIC, slugifiedAppName, str.slugify( _component ), 'assets' ) ) );
 
 		if ( GLOBAL.livereload ) stream.pipe( GLOBAL.livereload() );
@@ -96,7 +102,6 @@ components.forEach( function ( _component ) {
 		return stream;
 	} );
 } );
-
 
 gulp.task( 'src/client/components', [
 	'src/client/components/scripts',

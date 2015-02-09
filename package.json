@@ -1,6 +1,6 @@
 {
   "name": "grailed",
-  "version": "4.0.3",
+  "version": "4.0.6",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "gulp-jshint": "^1.9.0",
     "gulp-less": "^2.0.1",
     "gulp-livereload": "^3.6.0",
+    "gulp-plumber": "^0.6.6",
     "gulp-rename": "^1.2.0",
     "gulp-shell": "^0.2.10",
     "gulp-uglify": "^1.0.1",
