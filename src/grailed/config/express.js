@@ -51,6 +51,16 @@ module.exports = {
 								}
 								break;
 
+							case 'compression':
+								var compression = require( 'compression' );
+
+								if ( method ) {
+									app.use( method );
+								} else {
+									app.use( compression() );
+								}
+								break;
+
 							case 'bodyParser':
 								var bodyParser = require( 'body-parser' );
 
