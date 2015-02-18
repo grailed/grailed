@@ -15,5 +15,8 @@ async.waterfall( [
 	grailed.config.express.init
 
 ], function ( _error ) {
+	if ( _error ) {
+		throw _error;
+	}
 	grailed.emit( 'ready' );
 } );
