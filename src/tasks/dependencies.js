@@ -4,7 +4,7 @@ var config = require( './config/index' ),
 	str = require( 'underscore.string' ),
 	uglify = require( 'gulp-uglify' );
 
-gulp.task( 'src/client/dependencies/scripts', function () {
+gulp.task( 'src/client/dependencies/scripts', [ 'src/client/components' ], function () {
 	var dependencies;
 
 	try {
