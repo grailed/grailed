@@ -5,8 +5,7 @@ module.exports = {
 			hasKey = require( 'sc-haskey' ),
 			is = require( 'sc-is' ),
 			path = require( 'path' ),
-			http = require( 'http' ),
-			error = grailed.system.helpers.error;
+			http = require( 'http' );
 
 		var app = grailed.express = express();
 		var server = http.Server( app );
@@ -126,7 +125,6 @@ module.exports = {
 								if ( app.get( 'env' ) !== 'production' ) {
 									if ( status === 500 ) {
 										console.error( 'Unexpected server error:', err.stack );
-										grailed.system.helpers.error( 500, err );
 									}
 								}
 
