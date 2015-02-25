@@ -12,6 +12,7 @@ async.waterfall( [
 	grailed.config.database.init,
 	grailed.config.moldy.init,
 	grailed.config.modules.init,
+	grailed.config.routes.init,
 	grailed.config.express.init
 
 ], function ( _error ) {
