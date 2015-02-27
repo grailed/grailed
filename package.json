@@ -28,7 +28,7 @@
     "emitter-component": "^1.1.1",
     "express": "^4.10.2",
     "glob": "^4.3.1",
-    "grailed-module-system": "^1.0.0",
+    "grailed-module-system": "~1.2.0",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.4.2",
     "gulp-jshint": "^1.9.0",
