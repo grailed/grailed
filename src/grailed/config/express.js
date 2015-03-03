@@ -117,6 +117,13 @@ module.exports = {
 
 							break;
 
+						case 'express-bearer-token':
+
+							var bearerToken = require( 'express-bearer-token' );
+							app.use( bearerToken() );
+
+							break;
+
 						case 'errorHandler':
 
 							app.use( function ( err, req, res, next ) {
