@@ -3,6 +3,10 @@ module.exports = function ( _done ) {
 		done = _.last( arguments ) || _.noop,
 		exec = require( 'child_process' ).exec;
 
+	global.request = require( 'request' ).defaults( {
+		json: true,
+		jar: true
+	} );
 	async.waterfall( [
 
 		function ( _wcallback ) {
