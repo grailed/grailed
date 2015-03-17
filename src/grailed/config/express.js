@@ -101,7 +101,7 @@ module.exports = {
 									app.use( i18n.init );
 								}
 							} catch ( e ) {
-								console.log( 'error', e );
+								console.error( 'error', e );
 							}
 							break;
 
