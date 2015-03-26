@@ -3,8 +3,9 @@ module.exports = function ( gulp ) {
 
 	require( './components' );
 	require( './dependencies' );
-	require( './watch' );
+	require( './reload' );
 	require( './server' );
+	require( './watch' );
 
 	return {
 		'build': [ 'src/client/dependencies', 'src/client/components' ],
