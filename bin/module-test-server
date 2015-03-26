@@ -32,6 +32,9 @@ module.exports = function () {
 
 		app.use( function ( err, req, res, next ) {
 			var status = err.status || 500;
+			if (status == 500) {
+				console.log("Server 500 Error:\n", err.stack || err);
+			}
 
 			res.status( status ).json( {
 				error: {
@@ -68,4 +71,3 @@ module.exports = function () {
 		}
 	}
 };
-
