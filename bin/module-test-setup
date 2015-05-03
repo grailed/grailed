@@ -30,7 +30,7 @@ process.env.GRAILED_SALT = process.env.GRAILED_SALT || 'Cu8wI9Ox6teeF5nUfs1of7uM
  * Grailed
  */
 grailed.database = {
-	databaseName: pkg.name + '-test',
+	databaseName: pkg.name.replace(/@/g, '').replace(/\//g, '-') + '-test',
 	username: '',
 	password: '',
 	primaryServer: '127.0.0.1',
