@@ -11,6 +11,7 @@ module.exports = function ( gulp ) {
 		'build': [ 'src/client/dependencies', 'src/client/components' ],
 		'default': [ 'build', 'minify' ],
 		'minify': [ 'src/client/components/minify' ],
-		'run': [ 'default', 'server', 'src/watch' ]
+		'run': [ 'default', 'server', 'watch' ],
+		'watch': [ 'src/watch' ]
 	};
 };
