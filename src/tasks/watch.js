@@ -8,6 +8,8 @@ gulp.task( 'src/watch', function () {
 	gulp.watch( [ config.CWD + '/config/**/*' ], [ 'server' ] );
 	gulp.watch( [ config.PATH_API + '/**/*' ], [ 'server' ] );
 	gulp.watch( [ config.PATH_CLIENT + '/**/*.ejs' ], [ 'reload' ] );
+	gulp.watch( [ config.PATH_CLIENT + '/assets/**/*' ], [ 'src/client/assets' ] );
+	gulp.watch( [ config.PATH_CLIENT + '/styles/**/*.less' ], [ 'src/client/styles' ] );
 	gulp.watch( [ config.PATH_CLIENT + '/components/**/*.html' ], [ 'src/client/components/assets' ] );
 	gulp.watch( [ config.PATH_CLIENT + '/components/**/*.js' ], [ 'src/client/components/scripts' ] );
 	gulp.watch( [ config.PATH_CLIENT + '/components/**/*.less' ], [ 'src/client/components/styles' ] );
