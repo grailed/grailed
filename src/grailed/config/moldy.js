@@ -55,17 +55,21 @@ module.exports = {
 				createdModel.__$save = createdModel.$save;
 
 				createdModel.$save = function ( _options, _callback ) {
-					var options = is.an.object( _options ) ? _options : {},
+					var options = is.an.object( _options ) ? _options : null,
 						cb = _.last( arguments );
 
-					if ( !options.doNotChangeModDates ) {
+					if ( !options || !options.doNotChangeModDates ) {
 						if ( !createdModel.id ) {
 							createdModel.createdAt = new Date();
 						}
 						createdModel.updatedAt = new Date();
 					}
 
-					createdModel.__$save( cb );
+					if ( options ) {
+						createdModel.__$save( options, cb );
+					} else {
+						createdModel.__$save( cb );
+					}
 				};
 
 				return createdModel;
