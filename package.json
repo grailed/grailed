@@ -59,6 +59,6 @@
     "underscore.string": "^3.0.2"
   },
   "devDependencies": {
-    "mongodb": "^1.4.30"
+    "mongodb": "^2.0.0"
   }
 }
