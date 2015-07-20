@@ -57,9 +57,6 @@
     "underscore": "^1.7.0",
     "underscore.string": "^3.0.2"
   },
-  "optionalDependencies": {
-    "moldy-mongo-adapter": "^2.0.0"
-  },
   "devDependencies": {
     "mongodb": "^2.0.0"
   }
