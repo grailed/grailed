@@ -53,7 +53,6 @@
     "sc-is": "0.0.3",
     "sc-merge": "^1.0.1",
     "should": "^4.2.1",
-    "socket.io": "^1.3.4",
     "underscore": "^1.7.0",
     "underscore.string": "^3.0.2"
   },
