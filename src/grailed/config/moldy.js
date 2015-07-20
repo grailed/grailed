@@ -87,9 +87,14 @@ module.exports = {
 			( db.primaryServer + ( db.primaryServerPort ? ':' + db.primaryServerPort : '' ) ) +
 			( '/' );
 
-		moldy.use( require( 'moldy-mongo-adapter' ) );
-		moldy.adapters.mongodb.config.databaseName = db.databaseName;
-		moldy.adapters.mongodb.config.connectionString = dbAddress;
+		try {
+			var moldyMongoAdapter = require( 'moldy-mongo-adapter' );
+			moldy.use( moldyMongoAdapter );
+			moldy.adapters.mongodb.config.databaseName = db.databaseName;
+			moldy.adapters.mongodb.config.connectionString = dbAddress;
+		} catch ( _error ) {
+			// moldy-mongo-adapter is an optional dependency. 
+		}
 
 		_next && _next();
 	}
