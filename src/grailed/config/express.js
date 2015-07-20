@@ -77,7 +77,12 @@ module.exports = {
 								break;
 
 							case 'socket.io':
-								var io = grailed.io = require( 'socket.io' )( server );
+								try {
+									var socketio = require( 'socket.io' );
+									var io = grailed.io = socketio( server );
+								} catch ( error ) {
+									console.log( 'Socket.IO not found. Please install it in your host package.' );
+								}
 
 								break;
 
