@@ -16,6 +16,8 @@ module.exports = {
 			model.__$find = model.$find;
 			model.__$findOne = model.$findOne;
 			model.__create = model.create;
+			model.__$destroy = model.$destroy;
+			model.__$restore = model.$restore;
 
 			model.$find = function ( _query, _callback ) {
 				var query = is.an.object( _query ) ? _query : {},
@@ -53,6 +55,8 @@ module.exports = {
 				var createdModel = model.__create( _initial );
 
 				createdModel.__$save = createdModel.$save;
+				createdModel.__$destroy = createdModel.$destroy;
+				createdModel.__$restore = createdModel.$restore;
 
 				createdModel.$save = function ( _options, _callback ) {
 					var options = is.an.object( _options ) ? _options : null,
@@ -72,8 +76,30 @@ module.exports = {
 					}
 				};
 
+				// We only want $destroy and $restore to be available
+				// if an item exists
+				if ( createdModel.id ) {
+
+					
+				}
+
+				createdModel.$destroy = function ( _callback ) {
+					createdModel.deletedAt = new Date();
+					createdModel.deleted = true;
+
+					createdModel.__$save( _callback );
+				};
+
+				createdModel.$restore = function ( _callback ) {
+					createdModel.deletedAt = null;
+					createModel.deleted = false;
+
+					createdModel.__$save( _callback );
+				};
+
 				return createdModel;
 			};
+
 
 			return model;
 		};
