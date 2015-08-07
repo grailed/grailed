@@ -16,6 +16,7 @@ module.exports = {
 			model.__$find = model.$find;
 			model.__$findOne = model.$findOne;
 			model.__create = model.create;
+			model.__$destroy = model.$destroy;
 
 			model.$find = function ( _query, _callback ) {
 				var query = is.an.object( _query ) ? _query : {},
@@ -53,6 +54,7 @@ module.exports = {
 				var createdModel = model.__create( _initial );
 
 				createdModel.__$save = createdModel.$save;
+				createdModel.__$destroy = createdModel.$destroy;
 
 				createdModel.$save = function ( _options, _callback ) {
 					var options = is.an.object( _options ) ? _options : null,
@@ -72,8 +74,22 @@ module.exports = {
 					}
 				};
 
+				// We only want modify $destroy if schema has it specified
+				if ( createdModel.id && typeof createdModel.deleted !== 'undefined' ) {
+
+					createdModel.$destroy = function ( _callback ) {
+						createdModel.deletedAt = new Date();
+						createdModel.deleted = true;
+
+						createdModel.__$save( _callback );
+					};
+
+				}
+
+
 				return createdModel;
 			};
+
 
 			return model;
 		};
