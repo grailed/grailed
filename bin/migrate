@@ -48,8 +48,16 @@ exports.down = function ( _filename, _middlware, _next ) {
 var database = {
 
 	connect: function ( _done ) {
-		var databaseConfig = require( path.join( process.cwd(), '/config/database' ) );
-		MongoClient.connect( 'mongodb://127.0.0.1:27017/' + databaseConfig.default.databaseName, function ( _error, _db ) {
+		require( path.join( __dirname, '../src/grailed/config/database' ) ).init();
+		var db = grailed.database,
+			dbAddress = 'mongodb://' +
+			( db.username ) +
+			( db.password ? ':' + db.password : '' ) +
+			( db.username ? '@' : '' ) +
+			( db.secondaryServer ? db.secondaryServer + ( db.secondaryServerPort ? ':' + db.secondaryServerPort : '' ) + ',' : '' ) +
+			( db.primaryServer + ( db.primaryServerPort ? ':' + db.primaryServerPort : '' ) ) +
+			( '/' );
+		MongoClient.connect( dbAddress, function ( _error, _db ) {
 			exports.db = _db;
 			_done( _error );
 		} );
