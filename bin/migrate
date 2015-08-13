@@ -56,7 +56,7 @@ var database = {
 			( db.username ? '@' : '' ) +
 			( db.secondaryServer ? db.secondaryServer + ( db.secondaryServerPort ? ':' + db.secondaryServerPort : '' ) + ',' : '' ) +
 			( db.primaryServer + ( db.primaryServerPort ? ':' + db.primaryServerPort : '' ) ) +
-			( '/' );
+			( '/' + db.databaseName );
 		MongoClient.connect( dbAddress, function ( _error, _db ) {
 			exports.db = _db;
 			_done( _error );
