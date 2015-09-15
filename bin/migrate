@@ -48,6 +48,7 @@ exports.down = function ( _filename, _middlware, _next ) {
 var database = {
 
 	connect: function ( _done ) {
+		require( path.join( __dirname, '../src/grailed/config/environment' ) ).init();
 		require( path.join( __dirname, '../src/grailed/config/database' ) ).init();
 		var db = grailed.database,
 			dbAddress = 'mongodb://' +
@@ -57,7 +58,30 @@ var database = {
 			( db.secondaryServer ? db.secondaryServer + ( db.secondaryServerPort ? ':' + db.secondaryServerPort : '' ) + ',' : '' ) +
 			( db.primaryServer + ( db.primaryServerPort ? ':' + db.primaryServerPort : '' ) ) +
 			( '/' + db.databaseName );
-		MongoClient.connect( dbAddress, function ( _error, _db ) {
+		var options = {
+			server: {}
+		};
+		if ( db.ssl ) {
+			var fs = require( 'fs' );
+
+			options.server.ssl = true;
+			options.server.sslValidate = db.sslValidate;
+			var sslKey,
+				sslCert;
+			if ( db.sslKeyChain ) {
+				sslKey = sslCert = fs.readFileSync( db.sslKeyChain );
+			}
+			if ( db.sslKey ) {
+				sslKey = fs.readFileSync( db.sslKey );
+			}
+			if ( db.sslCert ) {
+				sslCert = fs.readFileSync( db.sslCert );
+			}
+			options.server.sslKey = sslKey;
+			options.server.sslCert = sslCert;
+		}
+
+		MongoClient.connect( dbAddress, options, function ( _error, _db ) {
 			exports.db = _db;
 			_done( _error );
 		} );

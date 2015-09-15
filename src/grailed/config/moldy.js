@@ -3,6 +3,7 @@ module.exports = {
 		var _ = require( 'underscore' ),
 			cast = require( 'sc-cast' ),
 			is = require( 'sc-is' ),
+			fs = require( 'fs' ),
 			moldy = grailed.moldy = require( 'moldy' );
 
 		/**
@@ -103,13 +104,37 @@ module.exports = {
 			( db.primaryServer + ( db.primaryServerPort ? ':' + db.primaryServerPort : '' ) ) +
 			( '/' );
 
+		var moldyMongoAdapter;
 		try {
-			var moldyMongoAdapter = require( 'moldy-mongo-adapter' );
+			// moldy-mongo-adapter is an optional dependency.
+			moldyMongoAdapter = require( 'moldy-mongo-adapter' );
+		} catch ( _error ) {}
+
+		if ( moldyMongoAdapter ) {
 			moldy.use( moldyMongoAdapter );
 			moldy.adapters.mongodb.config.databaseName = db.databaseName;
 			moldy.adapters.mongodb.config.connectionString = dbAddress;
-		} catch ( _error ) {
-			// moldy-mongo-adapter is an optional dependency. 
+			moldy.adapters.mongodb.config.options = {
+				server: {}
+			};
+			if ( db.ssl ) {
+				moldy.adapters.mongodb.config.options.server.ssl = true;
+				moldy.adapters.mongodb.config.options.server.sslValidate = db.sslValidate;
+
+				var sslKey,
+					sslCert;
+				if ( db.sslKeyChain ) {
+					sslKey = sslCert = fs.readFileSync( db.sslKeyChain );
+				}
+				if ( db.sslKey ) {
+					sslKey = fs.readFileSync( db.sslKey );
+				}
+				if ( db.sslCert ) {
+					sslCert = fs.readFileSync( db.sslCert );
+				}
+				moldy.adapters.mongodb.config.options.server.sslKey = sslKey;
+				moldy.adapters.mongodb.config.options.server.sslCert = sslCert;
+			}
 		}
 
 		_next && _next();
