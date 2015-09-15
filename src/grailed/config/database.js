@@ -6,7 +6,12 @@ module.exports = {
 
 		try {
 			appDatabase = require( path.join( process.env.GRAILED_PATH_CONFIG, 'database' ) );
-		} catch ( e ) {
+		} catch ( e ) {}
+
+		function isTrue( val ) {
+			if ( typeof val === 'string' && val.toLowerCase() == 'true' ) return true;
+			if ( val == '1' ) return true;
+			return false;
 		}
 
 		var defaultDatabaseConfig = {
@@ -16,7 +21,14 @@ module.exports = {
 			primaryServer: process.env.GRAILED_DATABASE_PRIMARY_SERVER || '127.0.0.1',
 			primaryServerPort: process.env.GRAILED_DATABASE_PRIMARY_SERVER_PORT || '27017',
 			secondaryServer: process.env.GRAILED_DATABASE_SECONDARY_SERVER || '',
-			secondaryServerPort: process.env.GRAILED_DATABASE_SECONDARY_SERVER_PORT || ''
+			secondaryServerPort: process.env.GRAILED_DATABASE_SECONDARY_SERVER_PORT || '',
+			ssl: isTrue( process.env.GRAILED_DATABASE_SSL ) || false,
+			sslValidate: isTrue( process.env.GRAILED_DATABASE_SSL_VALIDATE ) || false,
+			sslKeyChain: process.env.GRAILED_DATABASE_VALIDATE_SSL_KEYCHAIN || false,
+			sslKey: process.env.GRAILED_DATABASE_VALIDATE_SSL_KEY || false,
+			sslCert: process.env.GRAILED_DATABASE_VALIDATE_SSL_CERT || false,
+			sslKey: process.env.GRAILED_DATABASE_VALIDATE_SSL_CERT || false,
+			sslCert: process.env.GRAILED_DATABASE_VALIDATE_SSL_CERT || false
 		};
 
 		grailed.database = merge( true, defaultDatabaseConfig, appDatabase.default, appDatabase[ process.env.NODE_ENV ] );
