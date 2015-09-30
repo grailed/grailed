@@ -24,11 +24,10 @@ module.exports = {
 			secondaryServerPort: process.env.GRAILED_DATABASE_SECONDARY_SERVER_PORT || '',
 			ssl: isTrue( process.env.GRAILED_DATABASE_SSL ) || false,
 			sslValidate: isTrue( process.env.GRAILED_DATABASE_SSL_VALIDATE ) || false,
-			sslKeyChain: process.env.GRAILED_DATABASE_VALIDATE_SSL_KEYCHAIN || false,
-			sslKey: process.env.GRAILED_DATABASE_VALIDATE_SSL_KEY || false,
-			sslCert: process.env.GRAILED_DATABASE_VALIDATE_SSL_CERT || false,
-			sslKey: process.env.GRAILED_DATABASE_VALIDATE_SSL_CERT || false,
-			sslCert: process.env.GRAILED_DATABASE_VALIDATE_SSL_CERT || false
+			sslKeyChain: process.env.GRAILED_DATABASE_SSL_KEYCHAIN || process.env.GRAILED_DATABASE_VALIDATE_SSL_KEYCHAIN || false,
+			sslKey: process.env.GRAILED_DATABASE_SSL_KEY || process.env.GRAILED_DATABASE_VALIDATE_SSL_KEY || false,
+			sslCert: process.env.GRAILED_DATABASE_SSL_CERT || process.env.GRAILED_DATABASE_VALIDATE_SSL_CERT || false,
+			replSetName: process.env.GRAILED_DATABASE_REPL_SET_NAME || false
 		};
 
 		grailed.database = merge( true, defaultDatabaseConfig, appDatabase.default, appDatabase[ process.env.NODE_ENV ] );

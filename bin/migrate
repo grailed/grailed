@@ -80,6 +80,13 @@ var database = {
 			options.server.sslKey = sslKey;
 			options.server.sslCert = sslCert;
 		}
+		if ( db.replSetName ) {
+			options.replSet = {
+				setName: db.replSetName,
+				ssl: db.ssl,
+				sslValidate: db.sslValidate
+			}
+		}
 
 		MongoClient.connect( dbAddress, options, function ( _error, _db ) {
 			exports.db = _db;

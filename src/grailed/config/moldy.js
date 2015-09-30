@@ -135,6 +135,13 @@ module.exports = {
 				moldy.adapters.mongodb.config.options.server.sslKey = sslKey;
 				moldy.adapters.mongodb.config.options.server.sslCert = sslCert;
 			}
+			if ( db.replSetName ) {
+				moldy.adapters.mongodb.config.options.replSet = {
+					setName: db.replSetName,
+					ssl: db.ssl,
+					sslValidate: db.sslValidate
+				}
+			}
 		}
 
 		_next && _next();
