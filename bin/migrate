@@ -11,15 +11,26 @@ var _ = require( 'underscore' ),
 
 var getIdFromData = function ( _data ) {
 	var id = _data.id || ( _data._id && _data._id.$oid ? _data._id.$oid : null );
-	return id ? ObjectID( id ) : null;
-}
+	return id ? new ObjectID( id ) : null;
+};
+
+/**
+ * Methods are specified in the id field of a dump.
+ * Options are:
+ * * skipIfExists (default)
+ * * mergeIfExists
+ * * replaceIfExists
+ */
+var getInsertMethodFromData = function ( _data ) {
+	return _data.id || ( _data._id && _data._id.__insertMethod ? _data._id.__insertMethod : 'skipIfExists' );
+};
 
 var done = function ( _next ) {
 	return function ( _error ) {
 		if ( _error ) console.error( _error );
 		_next();
-	}
-}
+	};
+};
 
 exports.up = function ( _filename, _middlware, _next ) {
 	var middlware = is.array( _middlware ) ? _middlware : [],
@@ -85,7 +96,7 @@ var database = {
 				setName: db.replSetName,
 				ssl: db.ssl,
 				sslValidate: db.sslValidate
-			}
+			};
 		}
 
 		MongoClient.connect( dbAddress, options, function ( _error, _db ) {
@@ -104,16 +115,17 @@ var database = {
 			exports.db.collection( _collection ).drop( function () {
 				_done();
 			} );
-		}
+		};
 	},
 
-	insert: function ( _collection, _data, _mergeIfExists ) {
+	insert: function ( _collection, _data ) {
 		return function ( _done ) {
 			var collection = exports.db.collection( _collection ),
 				data = is.a.string( _data ) ? require( _data ) : _data;
 
 			async.eachSeries( _.toArray( data ), function ( _data, _next ) {
 				var id = getIdFromData( _data );
+				var insertMethod = getInsertMethodFromData( _data );
 
 				if ( !id ) return collection.insert( _data, _next );
 
@@ -123,20 +135,28 @@ var database = {
 					if ( !_document ) {
 						_data._id = id;
 						collection.insert( _data, _next );
-					} else if ( _mergeIfExists ) {
+					} else if ( insertMethod === 'mergeIfExists' ) {
+						_data._id = id;
+						collection.update( {
+							_id: id
+						}, {
+							$set: _data
+						}, _next );
+					} else if ( insertMethod === 'replaceIfExists' ) {
 						_data._id = id;
 						collection.save( _data, _next );
 					} else {
+						// skipIfExists
 						_next();
 					}
 				} );
 
 			}, done( _done ) );
-		}
+		};
 	},
 
 	put: function ( _collection, _data ) {
-		return database.insert( _collection, _data, true );
+		return database.insert( _collection, _data );
 	},
 
 	remove: function ( _collection, _data ) {
@@ -154,6 +174,6 @@ var database = {
 				}, _next );
 
 			}, done( _done ) );
-		}
+		};
 	}
 };
