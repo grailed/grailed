@@ -466,10 +466,11 @@ The dump file is the JSON data you are migrating. In the example below `user` is
 
 The `__insertMethod` parameter is optional, and specifies what happens when the item already exists in the database. The following actions are available:
 
-__insertMethod | Description         
----------------|---------------------
-skipIfExists   | Default. Don't do anything if the entry already exists.
-mergeIfExists  | Merge the provided values over the top of the existing values.
+__insertMethod  | Description         
+----------------|---------------------
+skipIfExists    | Default. Don't do anything if the entry already exists.
+mergeIfExists   | Merge the provided values over the top of the existing values.
+replaceIfExists | Replace the entry with the new values.
 
 ### Roadmap
 

@@ -19,6 +19,7 @@ var getIdFromData = function ( _data ) {
  * Options are:
  * * skipIfExists (default)
  * * mergeIfExists
+ * * replaceIfExists
  */
 var getInsertMethodFromData = function ( _data ) {
 	return _data.id || ( _data._id && _data._id.__insertMethod ? _data._id.__insertMethod : 'skipIfExists' );
@@ -135,6 +136,9 @@ var database = {
 						_data._id = id;
 						collection.insert( _data, _next );
 					} else if ( insertMethod === 'mergeIfExists' ) {
+						_data._id = id;
+						collection.update( _data, _next );
+					} else if ( insertMethod === 'replaceIfExists' ) {
 						_data._id = id;
 						collection.save( _data, _next );
 					} else {
