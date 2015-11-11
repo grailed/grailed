@@ -23,7 +23,6 @@ Grailed is a skinny framework using a divorced client & api pattern to help glue
     - [Views](#views)
 - [Public](#public)
 - [Tasks](#tasks)
-- [Migrations](#migrations)
 - [Tests](#tests)
 	- [Create Tests](#create-tests)
 - [Data Migration](#data-migration)
@@ -325,7 +324,7 @@ Say you want to create a custom carousel component.
 
 > Components are processed and placed in `/public/components/{app name}/{component name}`
 
- 
+
 #### Dependencies
 
 Dependencies are typically javascript libraries like jQuery, angular and underscore. This feature in Grailed is simple. Grailed's tasks will simply concat these files and place a single file in `/public/components/{app name}/dependencies.js`.
@@ -349,7 +348,7 @@ module.exports = [
 
 #### Views
 
-The express view folder. 
+The express view folder.
 
 Given the controller referencing a view called `main.ejs`
 
@@ -457,12 +456,20 @@ The dump file is the JSON data you are migrating. In the example below `user` is
 {
 	"user": [ {
 		"_id": {
-			"$oid": "53a21ed266fa537e1559a24d"
+			"$oid": "53a21ed266fa537e1559a24d",
+			"__insertMethod": "mergeIfExists"
 		},
 		"name": "david"
 	} ]
 }
 ```
+
+The `__insertMethod` parameter is optional, and specifies what happens when the item already exists in the database. The following actions are available:
+
+__insertMethod | Description         
+---------------|---------------------
+skipIfExists   | Default. Don't do anything if the entry already exists.
+mergeIfExists  | Merge the provided values over the top of the existing values.
 
 ### Roadmap
 
