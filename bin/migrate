@@ -137,7 +137,9 @@ var database = {
 						collection.insert( _data, _next );
 					} else if ( insertMethod === 'mergeIfExists' ) {
 						_data._id = id;
-						collection.update( _data, _next );
+						collection.update( {
+							id: id
+						}, _data, _next );
 					} else if ( insertMethod === 'replaceIfExists' ) {
 						_data._id = id;
 						collection.save( _data, _next );
