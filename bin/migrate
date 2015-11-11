@@ -11,7 +11,7 @@ var _ = require( 'underscore' ),
 
 var getIdFromData = function ( _data ) {
 	var id = _data.id || ( _data._id && _data._id.$oid ? _data._id.$oid : null );
-	return id ? ObjectID( id ) : null;
+	return id ? new ObjectID( id ) : null;
 };
 
 /**
@@ -138,8 +138,10 @@ var database = {
 					} else if ( insertMethod === 'mergeIfExists' ) {
 						_data._id = id;
 						collection.update( {
-							id: id
-						}, _data, _next );
+							_id: id
+						}, {
+							$set: _data
+						}, _next );
 					} else if ( insertMethod === 'replaceIfExists' ) {
 						_data._id = id;
 						collection.save( _data, _next );
