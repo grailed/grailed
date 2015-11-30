@@ -143,10 +143,8 @@ module.exports = {
 								app.use( function ( err, req, res, next ) {
 									var status = err.status || 500;
 
-									if ( app.get( 'env' ) !== 'production' ) {
-										if ( status === 500 ) {
-											console.error( 'Unexpected server error:', err.stack );
-										}
+									if ( status === 500 ) {
+										console.error( 'Unexpected server error:', err.stack );
 									}
 
 									res.status( status ).json( {
