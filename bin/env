@@ -60,6 +60,6 @@ Object.keys( grailedDefaults ).forEach( function ( _defaultKey ) {
 } );
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-process.env.DEBUG = config.APP_NAME;
+process.env.DEBUG = process.env.DEBUG || config.APP_NAME;
 
 module.exports = config;
