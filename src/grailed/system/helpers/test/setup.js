@@ -23,15 +23,6 @@ module.exports = function ( _done ) {
 			} );
 		},
 
-		// Migrate up
-		function ( _wcallback ) {
-			exec( 'migrate --state-file ' + '.tmp/.migrate', {
-				cwd: process.cwd()
-			}, function () {
-				_wcallback();
-			} );
-		},
-
 		// Call the setup hook
 		function ( _wcallback ) {
 			if ( !_.isFunction( config.setup ) ) return _wcallback();
