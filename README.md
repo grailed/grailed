@@ -1,3 +1,3 @@
 # Grailed 7
 
-Grailed has been officially deprecated. We you look at https://strongloop.com/ instead.
+Grailed has been officially deprecated. We recommend you look at http://loopback.io/ instead.

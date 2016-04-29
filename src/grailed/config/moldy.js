@@ -100,6 +100,7 @@ module.exports = {
 			( db.username ) +
 			( db.password ? ':' + db.password : '' ) +
 			( db.username ? '@' : '' ) +
+			( db.tertiaryServer ? db.tertiaryServer + ( db.tertiaryServerPort ? ':' + db.tertiaryServerPort : '' ) + ',' : '' ) +
 			( db.secondaryServer ? db.secondaryServer + ( db.secondaryServerPort ? ':' + db.secondaryServerPort : '' ) + ',' : '' ) +
 			( db.primaryServer + ( db.primaryServerPort ? ':' + db.primaryServerPort : '' ) ) +
 			( '/' );
