@@ -9,8 +9,6 @@ emitter( grailed );
 async.waterfall( [
 
 	grailed.config.environment.init,
-	grailed.config.database.init,
-	grailed.config.moldy.init,
 	grailed.config.modules.init,
 	grailed.config.routes.init,
 	grailed.config.express.init
