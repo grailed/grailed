@@ -22,13 +22,6 @@ module.exports = {
 				},
 
 				/**
-				 * Bootstrap
-				 */
-					function ( _next ) {
-					grailed.config.bootstrap.init( _next );
-				},
-
-				/**
 				 * Middlware
 				 */
 					function ( _next ) {
