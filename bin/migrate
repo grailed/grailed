@@ -61,6 +61,18 @@ var database = {
 	connect: function ( _done ) {
 		require( path.join( __dirname, '../src/grailed/config/environment' ) ).init();
 		require( path.join( __dirname, '../src/grailed/config/database' ) ).init();
+
+		var connected = function ( _error, _db ) {
+			exports.db = _db;
+			_done( _error );
+		};
+
+		//Newer way of connecting
+		if ( process.env.MONGO_CONNECTION_STRING ) {
+			MongoClient.connect( process.env.MONGO_CONNECTION_STRING, connected );
+			return;
+		}
+
 		var db = grailed.database,
 			dbAddress = 'mongodb://' +
 			( db.username ) +
@@ -100,10 +112,7 @@ var database = {
 			};
 		}
 
-		MongoClient.connect( dbAddress, options, function ( _error, _db ) {
-			exports.db = _db;
-			_done( _error );
-		} );
+		MongoClient.connect( dbAddress, options, connected );
 	},
 
 	disconnect: function () {
