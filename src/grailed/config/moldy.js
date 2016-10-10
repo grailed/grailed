@@ -12,6 +12,7 @@ module.exports = {
 		 */
 		moldy.__extend = moldy.extend;
 		moldy.extend = function ( _name, _schema ) {
+			if ( typeof _schema === 'undefined' ) throw 'Moldy schema can not be undefined';
 			var model = moldy.__extend( _name, _schema );
 
 			model.__$find = model.$find;
