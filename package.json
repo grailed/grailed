@@ -26,7 +26,6 @@
     "emitter-component": "^1.1.1",
     "express": "^4.10.2",
     "express-bearer-token": "^2.1.0",
-    "glob": "^4.3.1",
     "grailed-module-system": "^2.0.1",
     "i18n": "^0.5.0",
     "include-all": "^0.1.6",
