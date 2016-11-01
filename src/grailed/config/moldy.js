@@ -1,3 +1,5 @@
+var EventEmitter = require('events');
+
 module.exports = {
 	init: function ( _next ) {
 		var _ = require( 'underscore' ),
@@ -6,6 +8,8 @@ module.exports = {
 			fs = require( 'fs' ),
 			moldy = grailed.moldy = require( 'moldy' );
 
+		//Moldy event emitter to handle post save/create/delete events
+		moldy.events = new EventEmitter();
 		/**
 		 * Override all moldy models so when they are created the find methods mixin
 		 * `deleted $ne true` as we're not physically deleting items
@@ -62,17 +66,28 @@ module.exports = {
 					var options = is.an.object( _options ) ? _options : null,
 						cb = _.last( arguments );
 
+					var eventName = 'UPDATE';
 					if ( !options || !options.doNotChangeModDates ) {
 						if ( !createdModel.id ) {
+							eventName = 'CREATE';
 							createdModel.createdAt = new Date();
 						}
 						createdModel.updatedAt = new Date();
 					}
 
+					var cbProxy = function ( error, item ) {
+						if ( error ) return cb( error );
+						moldy.events.emit( eventName, {
+							itemId: item.id,
+							collectionName: _name,
+						} );
+						cb.apply( this, arguments );
+					};
+
 					if ( options ) {
-						createdModel.__$save( options, cb );
+						createdModel.__$save( options, cbProxy );
 					} else {
-						createdModel.__$save( cb );
+						createdModel.__$save( cbProxy );
 					}
 				};
 
@@ -83,7 +98,16 @@ module.exports = {
 						createdModel.deletedAt = new Date();
 						createdModel.deleted = true;
 
-						createdModel.__$save( _callback );
+						var cbProxy = function ( error, item ) {
+							if ( error ) return _callback( error );
+							moldy.events.emit( 'DELETE', {
+								itemId: item.id,
+								collectionName: _name,
+							} );
+							_callback.apply( this, arguments );
+						};
+
+						createdModel.__$save( cbProxy );
 					};
 
 				}
@@ -142,7 +166,7 @@ module.exports = {
 					setName: db.replSetName,
 					ssl: db.ssl,
 					sslValidate: db.sslValidate
-				}
+				};
 			}
 		}
 
