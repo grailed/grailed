@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 module.exports = function () {
 	var done = _.last( arguments );
 	var express = require( 'express' );
