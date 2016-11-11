@@ -1,4 +1,4 @@
-var EventEmitter = require('events');
+var EventEmitter = require( 'events' );
 
 module.exports = {
 	init: function ( _next ) {
@@ -16,7 +16,7 @@ module.exports = {
 		 */
 		moldy.__extend = moldy.extend;
 		moldy.extend = function ( _name, _schema ) {
-			if ( typeof _schema === 'undefined' ) throw 'Moldy schema can not be undefined';
+			if ( typeof _schema === 'undefined' ) throw new Error( 'Moldy schema ' + _name + 'can not be undefined' );
 			var model = moldy.__extend( _name, _schema );
 
 			model.__$find = model.$find;
